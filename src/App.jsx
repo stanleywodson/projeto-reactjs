@@ -3,30 +3,59 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [estado, setEstado] = useState('ENTRADA')
+  const [palpite, setPalpite] = useState(150)
+  const [numPalpite, setNumPalpite] = useState(1)
+
+  const [min, setMin] = useState(0)
+  const [max, setMax] = useState(300)
+
+  const iniciarJogo = () =>{
+    setEstado('RODANDO')
+    setMax(300)
+    setMin(0)
+    setPalpite(150)
+    setNumPalpite(1)
+  }
+
+  if(estado === 'ENTRADA'){
+    return <button onClick={iniciarJogo}>Começar a jogar!</button>
+  }
+
+  const menor = () =>{
+    setNumPalpite(numPalpite + 1)
+    setMax(palpite)
+    const proxPalpite = parseInt((palpite - min) / 2) + min
+    setPalpite(proxPalpite)
+  }
+  const maior = () => {
+    setNumPalpite(numPalpite +1)
+    setMin(palpite)
+    const proxPalpite = parseInt((max - palpite) / 2) + palpite
+    setPalpite(proxPalpite)
+  }
+  const acertou = () => {
+    setEstado('FIM')
+  }
+
+  if(estado === 'FIM'){
+    return (
+      <div>
+        <p>Acertei o número {palpite} com {numPalpite} chutes!</p>
+        <button onClick={iniciarJogo}>Iniciar Novamente?</button>
+      </div>
+    )
+    
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <p>número palpite {numPalpite}</p>
+        <p>O seu número é {palpite} ?</p>
+        <p>Min {min} / Max {max}</p>
+        <button onClick={menor}>Menor!</button>
+        <button onClick={acertou}>Acertou!</button>
+        <button onClick={maior}>Maior!</button>
     </div>
   )
 }
